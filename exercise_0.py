@@ -48,7 +48,7 @@ for k in range(100):
     y = torch.mm(A,x)
 
 time_per_iteration_cpu = (time.perf_counter() - t0)/100
-print(f'Matrix multiplication time CPU: {time_per_iteration_cpu:.04f}s')
+print('Matrix multiplication time CPU: %.4fs'%(time_per_iteration_cpu))
    
 A = A.cuda()
 x = x.cuda()
@@ -60,8 +60,8 @@ for k in range(100):
     y = torch.mm(A,x)
 torch.cuda.synchronize()
 time_per_iteration_gpu = (time.perf_counter() - t0)/100
-print(f'Matrix multiplication time GPU: {time_per_iteration_gpu:.04f}s') 
+print(f'Matrix multiplication time GPU: %.4fs'%(time_per_iteration_gpu)) 
     
     
 speedup = time_per_iteration_cpu/time_per_iteration_gpu
-print(f'GPU speedup factor = {speedup:.04f}x')
+print(f'GPU speedup factor = %.4fx'%speedup)

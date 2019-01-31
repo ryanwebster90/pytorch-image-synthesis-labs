@@ -31,11 +31,13 @@ with torch.no_grad():
     dzdy = ReLU_backward(y,dz)
     my_dzdx = 0# answer here
 
+
 # Import actual relu function, which has a derivative implemented in pytorch
 import torch.nn as nn
 relu = nn.ReLU()
 x.requires_grad = True
 y = A.mm(x)
+
 z = relu(y)
 
 z.backward(dz)
@@ -48,30 +50,30 @@ print('These two vectors should be the same!')
 # Uncomment and do this exercise if you have time
 # Minimize the function |ReLU(Ax) - w |^2, w.r.t. x
 # computes the summed squared error (x-y)**2.sum()
-#L2_loss = nn.MSELoss()
-#
-#x = torch.randn(512,1).cuda()
-#x.requires_grad=True
-#A = torch.randn(512,512).cuda()
-## randomly initialize solution w
-#w = relu(torch.randn(512,1).cuda()).detach()
-#
-## torch.optim has many optimizers
-#optimizer = torch.optim.Adam([x])
-#N_iterations= 1000
-#
-#for it in range(N_iterations):
-#    y = A.mm(x)
-#    z = relu(y)
-#    loss = L2_loss(z,w)
-#    
-#    loss.backward()
-#    
-#    # step updates optim variable (x), with derivatives computed by backprop
-#    # for example SGD is x(t) = x(t-1) - alpha*x.grad
-#    optimizer.step()
-#    if it%50==0:
-#        print(f'iteration = {it}, loss = {loss.item():.04f}')
+L2_loss = nn.MSELoss()
+
+x = torch.randn(512,1).cuda()
+x.requires_grad=True
+A = torch.randn(512,512).cuda()
+# randomly initialize solution w
+w = relu(torch.randn(512,1).cuda()).detach()
+
+# torch.optim has many optimizers
+optimizer = torch.optim.Adam([x])
+N_iterations= 1000
+
+for it in range(N_iterations):
+    y = A.mm(x)
+    z = relu(y)
+    loss = L2_loss(z,w)
+    
+    loss.backward()
+    
+    # step updates optim variable (x), with derivatives computed by backprop
+    # for example SGD is x(t) = x(t-1) - alpha*x.grad
+    optimizer.step()
+    if it%50==0:
+        print(f'iteration = %d, loss = %.4f'%(it,loss.item()))
     
     
 
