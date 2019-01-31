@@ -4,14 +4,16 @@ import torch
 # ReLU(X) = X if X>0 : 0 if X<=0
 # This operation must work on each element
 def my_ReLU(x):
-    x[x<=0] = 0
-    return x
+    x_c = x.clone()
+    x_c[x_c<=0] = 0
+    return x_c
 
 # EXEERCISE 1.2: Backward of ReLU
 def ReLU_backward(x,dzdy):
     # dydx is 1 x>0 and 0 x<=0
-    dzdy[x<=0] = 0
-    dzdx = dzdy
+    dzdy_c = dzdy.clone()
+    dzdy_c[x<=0] = 0
+    dzdx = dzdy_c
     return dzdx
     
 # EXERCISE 1.3: Implement backward of matrix multiplication w.r.t. x
