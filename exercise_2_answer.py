@@ -9,12 +9,11 @@ import torch.nn as nn
 class GramMatrix(nn.Module):
     def forward(self, input):
         b, c, h, w = input.size()
-        # flatten dimension
-        X = input.view(c,h*w)
-        G = X.mm(X.t())
-        # answer here
+        F = input.view(c, h * w)
+        G = torch.mm(F, F.t())
         return G
 
+#input('Completed Ex. 2.1')
 
 # Choose image size and image file 
 imsize0 = 512
@@ -46,15 +45,13 @@ if os.path.exists(im_folder)==False:
 torchvision.utils.save_image(y0,im_folder + 'input_image.jpg',normalize=True)
 
 y_activ = [out.detach() for out in vgg_net(y0)]
-# EXERCISE 2.2: View output activation sizes.
+# EXERCISE 2.2: Display sizes of entwork activations. 
 # What does this mean in terms of image representation?
-# reminder: Itensors are 1x (Channels) x (Height) x (Width)
+# Hint: Images are 1x (Channels) x (Height) x (Width)
 for feat in y_activ:
      print(feat.size())
 
-# Answer here
-
-
+input('Viewing activation sizes. PRESS ENTER')
 
 y_feats = [gram_matrix(activ) for activ in y_activ]
 
@@ -68,7 +65,7 @@ for i in range(N_optim_iter):
         loss = 0
         for ll,x_feat,y_feat in zip(loss_lambda,x_feats,y_feats):
             # EXERCISE 2.3: Complete this loss function
-#            loss += ll*L2_loss(answer_here,y_feat)
+            loss += ll*L2_loss(gram_matrix(x_feat),y_feat)
 
         loss.backward()
         print(f'iter={i:04d}, loss={loss.item():.03e}')
